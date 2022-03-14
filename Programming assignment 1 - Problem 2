@@ -1,0 +1,25 @@
+Problem 2 (Find integer cube root.)
+
+
+
+import math
+
+def integerCubeRootHelper (n, left, right):
+  cube = lambda x: x* x * x  # function to cube a number
+  assert (n >= 1)
+  assert (left < right)
+  assert (cube (left) <n), f'{left}, {right}'
+  assert (cube (right) > n), f'{left}, {right}'
+  return int(round(n**(1/3), 2))  #returns integer cube root of n
+  
+  *************************************************************************
+  #main function 
+  def integerCubeRoot(n):
+    assert( n > 0)
+    if (n == 1): 
+        return 1
+    if (n == 2):
+        return 1
+    return integerCubeRootHelper(n, 0, n-1)
+    
+    ************************************************************************
