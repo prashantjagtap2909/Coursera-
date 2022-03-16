@@ -1,0 +1,184 @@
+ Problem 2: Heap data structure to mantain/extract median (instead of minimum/maximum key)
+ 
+ class MaxHeap:
+    def __init__(self):
+        self.H = [None]
+        
+    def size(self):
+        return len(self.H)-1
+    
+    def __repr__(self):
+        return str(self.H[1:])
+        
+    def satisfies_assertions(self):
+        for i in range(2, len(self.H)):
+            assert self.H[i] <= self.H[i//2],  f'Maxheap property fails at position {i//2}, parent elt: {self.H[i//2]}, child elt: {self.H[i]}'
+    
+    def max_element(self):
+        return self.H[1]
+    
+    def bubble_up(self, index):
+        # your code here
+        # recycle bubble_up in min-heap, modify to Funcitonal programming styll
+        assert index >= 1
+        if index == 1: 
+            return self.H
+        parent_index = index // 2
+        if self.H[parent_index] > self.H[index]:
+            return self.H
+        else:
+            self.H[parent_index], self.H[index] = self.H[index], self.H[parent_index]
+            return self.bubble_up(parent_index)        
+            
+    
+    def bubble_down(self, index):
+        # your code here
+        #student name Prashant Jagtap
+        # recycle bubble_down in min-heap
+        assert index >= 1 and index < len(self.H)
+        lchild_index = 2 * index
+        rchild_index = 2 * index + 1
+        # set up the value of left child to the element at that index if valid, or else make it +Infinity
+        lchild_value = self.H[lchild_index] if lchild_index < len(self.H) else -float('inf')
+        # set up the value of right child to the element at that index if valid, or else make it +Infinity
+        rchild_value = self.H[rchild_index] if rchild_index < len(self.H) else -float('inf')
+        # If the value at the index is lessthan or equal to the minimum of two children, then nothing else to do
+        if self.H[index] >= max(lchild_value, rchild_value):
+            return self.H
+        # Otherwise, find the index and value of the smaller of the two children.
+        # A useful python trick is to compare 
+        min_child_value, min_child_index = max ((lchild_value, lchild_index), (rchild_value, rchild_index))
+        # Swap the current index with the least of its two children
+        self.H[index], self.H[min_child_index] = self.H[min_child_index], self.H[index]
+        # Bubble down on the minimum child index
+        return self.bubble_down(min_child_index)        
+        
+        
+    
+    # Function: insert
+    # Insert elt into minheap
+    # Use bubble_up/bubble_down function
+    def insert(self, elt):
+        # your code here (recycle)
+        # strategy: 1. insert at the end, (note: the index start at position 1)
+        # 2.only need to check parents (call bubble_up)
+        self.H.append(elt)
+        assert self.H[self.size()] == elt
+        # use bubble_up
+        self.bubble_up(self.size())        
+        
+    # Function: delete_max
+    # delete the largest element in the heap. Use bubble_up/bubble_down
+    def delete_max(self):
+        # your code here (recycle)
+         # stratgegy: delete the min (index==1), replace with the last element, then rebuild heap 
+        # 1. use the last element to inplace the delete element (pop()). 
+        # 2. then call bubble_down
+        # (note: the index start at position 1)
+        if self.size() > 1:
+            self.H[1] = self.H.pop(-1)
+            self.bubble_down(1)
+        else:
+            self.H.pop(-1)      
+            
+**************************************************************************************************************
+
+
+
+class MedianMaintainingHeap:
+    def __init__(self):
+        self.hmin = MinHeap()
+        self.hmax = MaxHeap()
+        
+    def satisfies_assertions(self):
+        if self.hmin.size() == 0:
+            assert self.hmax.size() == 0
+            return 
+        if self.hmax.size() == 0:
+            assert self.hmin.size() == 1
+            return 
+        # 1. min heap min element >= max heap max element
+        assert self.hmax.max_element() <= self.hmin.min_element(), f'Failed: Max element of max heap = {self.hmax.max_element()} > min element of min heap {self.hmin.min_element()}'
+        # 2. size of max heap must be equal or one lessthan min heap.
+        s_min = self.hmin.size()
+        s_max = self.hmax.size()
+        assert (s_min == s_max or s_max  == s_min -1 ), f'Heap sizes are unbalanced. Min heap size = {s_min} and Maxheap size = {s_max}'
+    
+    def __repr__(self):
+        return 'Maxheap:' + str(self.hmax) + ' Minheap:'+str(self.hmin)
+    
+    def get_median(self):
+        if self.hmin.size() == 0:
+            assert self.hmax.size() == 0, 'Sizes are not balanced'
+            assert False, 'Cannot ask for median from empty heaps'
+        if self.hmax.size() == 0:
+            assert self.hmin.size() == 1, 'Sizes are not balanced'
+            return self.hmin.min_element()
+        # your code here
+        # strategy: if lenth the same take both, otherwise, take hmin
+        if self.hmax.size() == self.hmin.size():
+            return (self.hmax.max_element() + self.hmin.min_element())/2
+        else:
+            return self.hmin.min_element()
+        
+    
+    # function: balance_heap_sizes
+    # ensure that the size of hmax == size of hmin or size of hmax +1 == size of hmin
+    # If the condition above does not hold, move the max element from max heap into the min heap or
+    # vice versa as needed to balance the sizes.
+    # This function could be called from insert/delete_median methods
+    def balance_heap_sizes(self):
+        # your code here
+        #student name prashant Jagtap
+        if self.hmax.size() +1 == self.hmin.size() or self.hmax.size() == self.hmin.size(): # explicit is better
+            return self.hmax, self.hmin
+        elif self.hmax.size() > self.hmin.size():
+            self.hmin.insert(self.hmax.max_element())
+            self.hmax.delete_max()
+            return self.balance_heap_sizes()
+            
+        else:
+            self.hmax.insert(self.hmin.min_element())
+            self.hmin.delete_min()
+            return self.balance_heap_sizes()
+            
+        
+    
+    def insert(self, elt):
+        # Handle the case when either heap is empty
+        if self.hmin.size() == 0:
+            # min heap is empty -- directly insert into min heap
+            self.hmin.insert(elt)
+            return 
+        if self.hmax.size() == 0:
+            # max heap is empty -- this better happen only if min heap has size 1.
+            assert self.hmin.size() == 1
+            if elt > self.hmin.min_element():
+                # Element needs to go into the min heap
+                current_min = self.hmin.min_element()
+                self.hmin.delete_min()
+                self.hmin.insert(elt)
+                self.hmax.insert(current_min)
+                # done!
+            else:
+                # Element goes into the max heap -- just insert it there.
+                self.hmax.insert(elt)
+            return 
+        # Now assume both heaps are non-empty
+        # your code here
+        # go to hmin first
+#         if elt >= self.hmax.max_element():
+#             self.hmin.insert(elt)
+#         else:
+#             self.hmax.insert(elt)
+        # note: (based on the implementation invariables, aka assert), we need to insert element into hmin
+        self.hmin.insert(elt)
+        self.balance_heap_sizes() 
+        
+        
+    def delete_median(self):
+        self.hmax.delete_max()
+        self.balance_heap_sizes()
+        
+        
+******************************************************************************************************************
