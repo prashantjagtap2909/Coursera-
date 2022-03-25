@@ -21,7 +21,7 @@ class MinHeap:
         return self.H[1]
 
     ## bubble_up function at index
-    ## WARNING: this function has been cut and paste for the next problem as well 
+   
     def bubble_up(self, index):
         assert index >= 1
         if index == 1: 
@@ -34,57 +34,50 @@ class MinHeap:
             self.bubble_up(parent_index)
     
     ## bubble_down function at index
-    ## WARNING: this function has been cut and paste for the next problem as well 
+    
     def bubble_down(self, index):
         assert index >= 1 and index < len(self.H)
         lchild_index = 2 * index
         rchild_index = 2 * index + 1
-        # set up the value of left child to the element at that index if valid, or else make it +Infinity
+        
         lchild_value = self.H[lchild_index] if lchild_index < len(self.H) else float('inf')
-        # set up the value of right child to the element at that index if valid, or else make it +Infinity
+        
         rchild_value = self.H[rchild_index] if rchild_index < len(self.H) else float('inf')
-        # If the value at the index is lessthan or equal to the minimum of two children, then nothing else to do
+        
         if self.H[index] <= min(lchild_value, rchild_value):
             return 
-        # Otherwise, find the index and value of the smaller of the two children.
-        # A useful python trick is to compare 
+        
         min_child_value, min_child_index = min ((lchild_value, lchild_index), (rchild_value, rchild_index))
-        # Swap the current index with the least of its two children
+       
         self.H[index], self.H[min_child_index] = self.H[min_child_index], self.H[index]
         # Bubble down on the minimum child index
         self.bubble_down(min_child_index)
         
         
-    # Function: heap_insert
-    # Insert elt into heap
-    # Use bubble_up/bubble_down function
+   
     def insert(self, elt):
         # your code here
-        # strategy: 1. insert at the end, (note: the index start at position 1)
-        # 2.only need to check parents (call bubble_up)
+        
         self.H.append(elt)
         assert self.H[self.size()] == elt
-        # use bubble_up
+        
         self.bubble_up(self.size())
         
         
     # Function: heap_delete_min
-    # delete the smallest element in the heap. Use bubble_up/bubble_down
+   
     def delete_min(self):
         # your code here
-        # stratgegy: delete the min (index==1), replace with the last element, then rebuild heap 
-        # 1. use the last element to inplace the delete element (pop()). 
-        # 2. then call bubble_down
-        # (note: the index start at position 1)
+        
         if self.size() > 1:
             self.H[1] = self.H.pop(-1)
             self.bubble_down(1)
         else:
             self.H.pop(-1)
         # First let us complete a minheap data structure.
-# Please complete missing parts below.
 
-# small revision
+
+
 
 class MinHeap:
     def __init__(self):
@@ -104,7 +97,7 @@ class MinHeap:
         return self.H[1]
 
     ## bubble_up function at index
-    ## WARNING: this function has been cut and paste for the next problem as well 
+    
     def bubble_up(self, index):
         assert index >= 1
         if index == 1: 
@@ -116,49 +109,40 @@ class MinHeap:
             self.H[parent_index], self.H[index] = self.H[index], self.H[parent_index]
             return self.bubble_up(parent_index)
     
-    ## bubble_down function at index
-    ## WARNING: this function has been cut and paste for the next problem as well 
+    
     def bubble_down(self, index):
         assert index >= 1 and index < len(self.H)
         lchild_index = 2 * index
         rchild_index = 2 * index + 1
-        # set up the value of left child to the element at that index if valid, or else make it +Infinity
+       
         lchild_value = self.H[lchild_index] if lchild_index < len(self.H) else float('inf')
-        # set up the value of right child to the element at that index if valid, or else make it +Infinity
+        
         rchild_value = self.H[rchild_index] if rchild_index < len(self.H) else float('inf')
-        # If the value at the index is lessthan or equal to the minimum of two children, then nothing else to do
+        
         if self.H[index] <= min(lchild_value, rchild_value):
             return 
-        # Otherwise, find the index and value of the smaller of the two children.
-        # A useful python trick is to compare 
+        
         min_child_value, min_child_index = min ((lchild_value, lchild_index), (rchild_value, rchild_index))
-        # Swap the current index with the least of its two children
+        
         self.H[index], self.H[min_child_index] = self.H[min_child_index], self.H[index]
-        # Bubble down on the minimum child index
+        
         self.bubble_down(min_child_index)
         
         
-    # Function: heap_insert
-    # Insert elt into heap
-    # Use bubble_up/bubble_down function
+    
     def insert(self, elt):
         # your code here
-        # strategy: 1. insert at the end, (note: the index start at position 1)
-        # 2.only need to check parents (call bubble_up)
+       
         self.H.append(elt)
         assert self.H[self.size()] == elt
-        # use bubble_up
+        
         self.bubble_up(self.size())
         
         
-    # Function: heap_delete_min
-    # delete the smallest element in the heap. Use bubble_up/bubble_down
+    
     def delete_min(self):
         # your code here
-        # stratgegy: delete the min (index==1), replace with the last element, then rebuild heap 
-        # 1. use the last element to inplace the delete element (pop()). 
-        # 2. then call bubble_down
-        # (note: the index start at position 1)
+       #student name Prashant Jagtap
         if self.size() > 1:
             self.H[1] = self.H.pop(-1)
             self.bubble_down(1)
@@ -186,19 +170,12 @@ class TopKHeap:
         # is self.A sorted
         for i in range(len(self.A) -1 ):
             assert self.A[i] <= self.A[i+1], f'Array A fails to be sorted at position {i}, {self.A[i], self.A[i+1]}'
-        # is self.H a heap (check min-heap property)
+        
         self.H.satisfies_assertions()
         # is every element of self.A less than or equal to each element of self.H
         for i in range(len(self.A)):
             assert self.A[i] <= self.H.min_element(), f'Array element A[{i}] = {self.A[i]} is larger than min heap element {self.H.min_element()}'
-        
-    # Function : insert_into_A
-    # This is a helper function that inserts an element `elt` into `self.A`.
-    # whenever size is < k,
-    #       append elt to the end of the array A
-    # Move the element that you just added at the very end of 
-    # array A out into its proper place so that the array A is sorted.
-    # return the "displaced last element" jHat (None if no element was displaced)
+   ced)
     def insert_into_A(self, elt):
         k = self.k
         print("k = ", k)
@@ -210,39 +187,26 @@ class TopKHeap:
             (self.A[j], self.A[j-1]) = (self.A[j-1], self.A[j])
             j = j -1 
         return
-    # bug here. it should be self.k (or add k = self.k)
-    # bug assert(self.size() < k) ????
     
             
-    # Function: insert -- insert an element into the data structure.
-    # Code to handle when self.size < self.k is already provided
+    
     def insert(self, elt):
         size = self.size()
         # If we have fewer than k elements, handle that in a special manner
         if size <= self.k:
             self.insert_into_A(elt)
             return 
-        # Code up your algorithm here.
-        # your code here
-        # strategy: 
-        # 1. call insert_into_A, len(k) become k+1 temperally
-        # 2. pop A[-1] and insert A[-1] to H (call H.insert(elt)), then len(A) back to k
+       
         self.insert_into_A(elt)
         self.H.insert(self.A.pop(-1))
-        
-    # Function: Delete top k -- delete an element from the array A
-    # In particular delete the j^{th} element where j = 0 means the least element.
-    # j must be in range 0 to self.k-1
+   
     def delete_top_k(self, j):
         k = self.k
         assert self.size() > k # we need not handle the case when size is less than or equal to k
         assert j >= 0
         assert j < self.k
         # your code here
-        # strategy:
-        # 1. delete: (when j < k, checked) call A.pop(j)
-        # 2. refill: A.append(H[1]), no need to update for A (since we can assure any a in A is larger than any h in H)
-        # 3. update H: call H.delete_min
+        
         self.A.pop(j)
         self.A.append(self.H.min_element())
         self.H.delete_min()
