@@ -8,13 +8,9 @@ def swap(a, i, j):
     a[i], a[j] = a[j], a[i]
 
 def simplePartition(a, pivot):
-    ## To do: partition the array a according to pivot.
-    # array must be partitioned into two regions - <= pivot followed by elements > pivot
-    ## If an element at the beginning of the array is already <= pivot in the beginning of the array, it should not
-    ## be moved by the algorithm.
+   
     # your code here
     #student name Prashant jagtap
-    #  no swap here
    
     left_partition, right_partition = [], []
     for elt in a:
@@ -22,10 +18,10 @@ def simplePartition(a, pivot):
             left_partition.append(elt)
         else:
             right_partition.append(elt)
-    # ugly code to affect "a" (bring in side-effect)
+   
     for i, elt in enumerate(left_partition + right_partition):
         a[i] = elt
-#     return left_partition + right_partition
+
             
     
             
