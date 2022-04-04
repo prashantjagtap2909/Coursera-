@@ -1,0 +1,32 @@
+Problem 1: Find Crossover Indices
+
+
+def findCrossoverIndexHelper(x, y, left, right):
+    assert(len(x) == len(y))
+    assert(left >= 0)
+    assert(left <= right-1)
+    assert(right < len(x))
+    assert(x[left] > y[left])
+    assert(x[right] < y[right])
+    
+     mid = (left+right)//2
+   
+    if(mid == left):
+        return mid
+  
+    if(x[mid] >= y[mid]):
+        return findCrossoverIndexHelper(x, y, mid, right)
+    
+    elif (x[mid] < y[mid]):
+        return findCrossoverIndexHelper(x, y, left, mid)
+        
+  *****************************************************************************************************
+  
+  def findCrossoverIndex(x, y):
+    assert(len(x) == len(y))
+    assert(x[0] > y[0])
+    n = len(x)
+    assert(x[n-1] < y[n-1]) 
+    return findCrossoverIndexHelper(x, y, 0, len(x)-1)
+
+********************************************************************************************************
