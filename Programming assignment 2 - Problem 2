@@ -18,8 +18,7 @@
         return self.H[1]
     
     def bubble_up(self, index):
-        # your code here
-        # recycle bubble_up in min-heap, modify to Funcitonal programming styll
+      
         assert index >= 1
         if index == 1: 
             return self.H
@@ -34,7 +33,7 @@
     def bubble_down(self, index):
         # your code here
         #student name Prashant Jagtap
-        
+       
         assert index >= 1 and index < len(self.H)
         lchild_index = 2 * index
         rchild_index = 2 * index + 1
@@ -42,21 +41,20 @@
         lchild_value = self.H[lchild_index] if lchild_index < len(self.H) else -float('inf')
         
         rchild_value = self.H[rchild_index] if rchild_index < len(self.H) else -float('inf')
-        
+       
         if self.H[index] >= max(lchild_value, rchild_value):
             return self.H
-       
+        
         min_child_value, min_child_index = max ((lchild_value, lchild_index), (rchild_value, rchild_index))
-       
+        
         self.H[index], self.H[min_child_index] = self.H[min_child_index], self.H[index]
         
         return self.bubble_down(min_child_index)        
         
         
     
-    
+   
     def insert(self, elt):
-        # your code here (recycle)
        
         self.H.append(elt)
         assert self.H[self.size()] == elt
@@ -70,8 +68,7 @@
             self.H[1] = self.H.pop(-1)
             self.bubble_down(1)
         else:
-            self.H.pop(-1)      
-            
+            self.H.pop(-1)       
 **************************************************************************************************************
 
 
@@ -90,7 +87,7 @@ class MedianMaintainingHeap:
             return 
        
         assert self.hmax.max_element() <= self.hmin.min_element(), f'Failed: Max element of max heap = {self.hmax.max_element()} > min element of min heap {self.hmin.min_element()}'
-        
+       
         s_min = self.hmin.size()
         s_max = self.hmax.size()
         assert (s_min == s_max or s_max  == s_min -1 ), f'Heap sizes are unbalanced. Min heap size = {s_min} and Maxheap size = {s_max}'
@@ -105,15 +102,13 @@ class MedianMaintainingHeap:
         if self.hmax.size() == 0:
             assert self.hmin.size() == 1, 'Sizes are not balanced'
             return self.hmin.min_element()
-        
-        
+      
         if self.hmax.size() == self.hmin.size():
             return (self.hmax.max_element() + self.hmin.min_element())/2
         else:
             return self.hmin.min_element()
         
-    
-    #
+   
     def balance_heap_sizes(self):
         # your code here
         #student name prashant Jagtap
@@ -132,27 +127,31 @@ class MedianMaintainingHeap:
         
     
     def insert(self, elt):
-        
+       
         if self.hmin.size() == 0:
            
             self.hmin.insert(elt)
             return 
         if self.hmax.size() == 0:
-           
+
             assert self.hmin.size() == 1
             if elt > self.hmin.min_element():
-               
+                
                 current_min = self.hmin.min_element()
                 self.hmin.delete_min()
                 self.hmin.insert(elt)
                 self.hmax.insert(current_min)
-                
+                # done!
             else:
-               
+                # Element goes into the max heap -- just insert it there.
                 self.hmax.insert(elt)
             return 
        
-
+#         if elt >= self.hmax.max_element():
+#             self.hmin.insert(elt)
+#         else:
+#             self.hmax.insert(elt)
+        
         self.hmin.insert(elt)
         self.balance_heap_sizes() 
         
@@ -160,6 +159,5 @@ class MedianMaintainingHeap:
     def delete_median(self):
         self.hmax.delete_max()
         self.balance_heap_sizes()
-        
         
 ******************************************************************************************************************
